@@ -4,6 +4,7 @@ QT += network
 
 TEMPLATE = lib
 DEFINES += HTTPREQUEST_LIBRARY
+INCLUDEPATH += $$PWD
 
 CONFIG += c++17
 
@@ -18,6 +19,22 @@ HEADERS += \
     response/httpstubresponse.h \
     status/httpstatuscodeenum.h
 
-INCLUDEPATH += C:/Users/Luiz/Documents/FilmFlowWorkspace/http-request/
+CONFIG( debug, debug|release ) {
+    DESTDIR = build/debug
+}
 
-include($$PWD/../film-flow-generic.pri)
+CONFIG( release, debug|release ) {
+    DESTDIR = build/release
+}
+
+OBJECTS_DIR = $$DESTDIR/.obj
+MOC_DIR = $$DESTDIR/.moc
+RCC_DIR = $$DESTDIR/.qrc
+UI_DIR = $$DESTDIR/.u
+
+unix {
+    target.path = /usr/bin
+    INSTALLS += target
+}
+
+
