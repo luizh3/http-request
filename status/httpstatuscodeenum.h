@@ -1,0 +1,11 @@
+#ifndef HTTPSTATUSCODEENUM_H
+#define HTTPSTATUSCODEENUM_H
+
+enum class HttpStatusCodeEnum: int {
+    NOT_FOUND = 404,
+    SUCCESS = 200,
+    MULTIPLE_CHOICES = 300,
+    TIMEOUT_ERROR = 599,
+};
+
+#endif // HTTPSTATUSCODEENUM_H
