@@ -10,8 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     httprequestmanager.cpp \
-    response/httpstubresponse.cpp \
-    status/httpstatuscodeenum.cpp
+    response/httpstubresponse.cpp
 
 HEADERS += \
     http-request_global.h \
