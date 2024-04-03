@@ -1,6 +1,6 @@
 #include "httprequestmanager.h"
 
-HttpStatusCodeEnum HttpRequestManager::awaitSync( const int timeout, QNetworkReply* reply, QByteArray& data ) const {
+QByteArray HttpRequestManager::awaitSync( const int timeout, QNetworkReply* reply, HttpStatusCodeEnum& status ) const {
 
     QTimer timer;
     QEventLoop loop;
@@ -19,24 +19,24 @@ HttpStatusCodeEnum HttpRequestManager::awaitSync( const int timeout, QNetworkRep
 
         reply->abort();
 
-        return HttpStatusCodeEnum::TIMEOUT_ERROR;
+        status = HttpStatusCodeEnum::TIMEOUT_ERROR;
 
     }
 
     timer.stop();
 
+    status = HttpStatusCodeEnum( reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt() );
+
     if ( reply->error() != QNetworkReply::NoError ) {
         qInfo() << "HttpRequestManager::awaitSync erro request";
-        return HttpStatusCodeEnum::NOT_FOUND;
+        return {};
     }
 
-    const HttpStatusCodeEnum tpStatusCode = HttpStatusCodeEnum( reply->attribute( QNetworkRequest::HttpStatusCodeAttribute ).toInt() );
+    const QByteArray data = reply->readAll();
 
-    data = reply->readAll();
+    qInfo() << "HttpRequestManager::awaitSync [STATUS]" << static_cast<int>( status ) << "[DATA]" << data;
 
-    qInfo() << "HttpRequestManager::awaitSync [TP_STATUS_CODE]" << static_cast<int>( tpStatusCode );
-
-    return tpStatusCode;
+    return data;
 
 }
 
