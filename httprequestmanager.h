@@ -29,17 +29,14 @@ public:
 
         qInfo() << "HttpRequestManager::get server ...";
 
-        QByteArray data = {};
-
         QNetworkRequest request = QNetworkRequest( QUrl( url ) );
         request.setSslConfiguration( QSslConfiguration::defaultConfiguration() );
 
         QNetworkAccessManager networkManager;
         QNetworkReply* reply = networkManager.get( request );
 
-        const HttpStatusCodeEnum status = awaitSync( timeout, reply, data );
-
-        qInfo() << "HttpRequestManager::get [DATA]" << data;
+        HttpStatusCodeEnum status;
+        const QByteArray data = awaitSync( timeout, reply, status );
 
         return toResponse<StubResponse>( data, status );
     };
@@ -60,7 +57,7 @@ private:
 
     };
 
-    HttpStatusCodeEnum awaitSync( const int timeout, QNetworkReply* reply, QByteArray& data ) const;
+    QByteArray awaitSync( const int timeout, QNetworkReply* reply, HttpStatusCodeEnum& status ) const;
 
     QString toUrl( const QString& base, const QStringList& paths ) const;
 };
